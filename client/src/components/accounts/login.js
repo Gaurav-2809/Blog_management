@@ -1,9 +1,23 @@
 import {React,useState} from 'react'
 import './login.css'
+
+const initialSignup={
+    name:'',
+    email:'',
+    password:''
+}
 const Login=()=>{
     const [accounts, signup]=useState('login');
+    const [signupuser, setSignup]=useState(initialSignup);
     const togglesignup=()=>{
         accounts==='login'?signup('signup'):signup('login')
+    }
+    const inputChange=(e)=>{
+       //console.log(e.target.name);
+       setSignup({...signupuser,[e.target.name]:e.target.value})
+    }
+    const signupUser=()=>{
+        
     }
     const imageURL = 'https://revenuearchitects.com/wp-content/uploads/2017/02/Blog_pic-450x255.png';
     return(
@@ -33,19 +47,19 @@ const Login=()=>{
                             <form style={{marginTop: '2rem', textAlign: 'left'}}>
                                 <div className='form-group'>
                                     <label for='name'>Name:</label>
-                                    <input type='text' className='form-control' id='name' name='name' placeholder='Enter your name'></input>
+                                    <input type='text' onChange={(e)=>inputChange(e)} className='form-control' id='name' name='name' placeholder='Enter your name'></input>
                                 </div>
-                                <div className='form-group' style={{marginTop:'1.5rem'}}>
+                                <div className='form-group' onChange={(e)=>inputChange(e)} style={{marginTop:'1.5rem'}}>
                                     <label for='email'>Email:</label>
                                     <input type='text' className='form-control' id='email' name='email' placeholder='Enter your email'></input>
                                 </div>
-                                <div className='form-group' style={{marginTop:'1.5rem'}}>
+                                <div className='form-group' onChange={(e)=>inputChange(e)} style={{marginTop:'1.5rem'}}>
                                     <label for='password'>Password:</label>
-                                    <input type='password' className='form-control' id='pass' name='pass' placeholder='Enter your Password'></input>
+                                    <input type='password' className='form-control' id='pass' name='password' placeholder='Enter your Password'></input>
                                 </div>
-                                <div className='btn form-control btn1' style={{backgroundColor: 'orange', marginTop:'1.5rem'}}>Sign Up</div>
+                                <div className='btn form-control btn1' style={{backgroundColor: 'orange', marginTop:'1.5rem'}} onClick={()=>signupUser()}>Sign Up</div>
                                 <div className='or' style={{marginTop:'1rem', marginBottom:'1rem', textAlign:'center'}}>OR</div>
-                                <div onClick={()=>togglesignup()} className='btn form-control btn2'>Login</div>
+                                <div onClick={()=>togglesignup()} className='btn form-control btn2'>Already have an account</div>
                             </form>
                     }
                 </div>
