@@ -1,6 +1,6 @@
 import {React,useState} from 'react'
 import './login.css'
-
+import { API } from '../../service/api'
 const initialSignup={
     name:'',
     email:'',
@@ -9,6 +9,7 @@ const initialSignup={
 const Login=()=>{
     const [accounts, signup]=useState('login');
     const [signupuser, setSignup]=useState(initialSignup);
+    const [error, setError]=useState('');
     const togglesignup=()=>{
         accounts==='login'?signup('signup'):signup('login')
     }
@@ -16,8 +17,15 @@ const Login=()=>{
        //console.log(e.target.name);
        setSignup({...signupuser,[e.target.name]:e.target.value})
     }
-    const signupUser=()=>{
-        
+    const signupUser= async ()=>{
+       let response=await API.userSignup(signupuser);
+       if(response.isSuccess){
+            setError('');
+            setSignup(initialSignup);
+            signup('login');
+       }else{
+            setError('something went wrong');
+       }
     }
     const imageURL = 'https://revenuearchitects.com/wp-content/uploads/2017/02/Blog_pic-450x255.png';
     return(
@@ -57,6 +65,7 @@ const Login=()=>{
                                     <label for='password'>Password:</label>
                                     <input type='password' className='form-control' id='pass' name='password' placeholder='Enter your Password'></input>
                                 </div>
+                                {error && <div className='error'>{error}</div>}
                                 <div className='btn form-control btn1' style={{backgroundColor: 'orange', marginTop:'1.5rem'}} onClick={()=>signupUser()}>Sign Up</div>
                                 <div className='or' style={{marginTop:'1rem', marginBottom:'1rem', textAlign:'center'}}>OR</div>
                                 <div onClick={()=>togglesignup()} className='btn form-control btn2'>Already have an account</div>
