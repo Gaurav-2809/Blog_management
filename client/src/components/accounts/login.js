@@ -1,6 +1,6 @@
 import {React,useState} from 'react'
 import './login.css'
-import { API } from '../../service/api'
+import { API } from '../../service/api.js'
 const initialSignup={
     name:'',
     email:'',
@@ -18,14 +18,28 @@ const Login=()=>{
        setSignup({...signupuser,[e.target.name]:e.target.value})
     }
     const signupUser= async ()=>{
-       let response=await API.userSignup(signupuser);
-       if(response.isSuccess){
-            setError('');
-            setSignup(initialSignup);
-            signup('login');
-       }else{
-            setError('something went wrong');
-       }
+        try{
+            let response=await API.userSignup(signupuser);
+            if(response.isSuccess){
+                setError('');
+                setSignup(initialSignup);
+                signup('login');  
+            }
+            else{
+                console.log("error");
+                
+            }
+        }catch(e){
+            setError("something went wrong");
+        }
+    //    let response=await API.userSignup(signupuser);
+    //    if(response.isSuccess){
+            // setError('');
+            // setSignup(initialSignup);
+            // signup('login');
+    //    }else{
+    //         setError('something went wrong');
+    //    }
     }
     const imageURL = 'https://revenuearchitects.com/wp-content/uploads/2017/02/Blog_pic-450x255.png';
     return(
@@ -47,6 +61,7 @@ const Login=()=>{
                                     <label for='password'>Password:</label>
                                     <input type='password' className='form-control' id='pass' name='pass' placeholder='Enter your Password'></input>
                                 </div>
+                                {error && <div className='error'>{error}</div>}
                                 <div className='btn form-control btn1' style={{backgroundColor: 'orange', marginTop:'1.5rem'}}>Login</div>
                                 <div className='or' style={{marginTop:'1rem', marginBottom:'1rem', textAlign:'center'}}>OR</div>
                                 <div onClick={()=>togglesignup()} className='btn form-control btn2'>Create an Account</div>
