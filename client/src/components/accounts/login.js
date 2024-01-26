@@ -1,6 +1,10 @@
 import {React,useState} from 'react'
 import './login.css'
 import { API } from '../../service/api.js'
+const initialLogin={
+    email:'',
+    password:''
+}
 const initialSignup={
     name:'',
     email:'',
@@ -8,6 +12,7 @@ const initialSignup={
 }
 const Login=()=>{
     const [accounts, signup]=useState('login');
+    const [login, SetLogin]=useState(initialLogin);
     const [signupuser, setSignup]=useState(initialSignup);
     const [error, setError]=useState('');
     const togglesignup=()=>{
@@ -41,6 +46,23 @@ const Login=()=>{
     //         setError('something went wrong');
     //    }
     }
+
+    const onValueChange=(e)=>{
+        SetLogin({...login,[e.target.name]: e.target.value})
+    }
+    const loginUser=async ()=>{
+        try{
+            let response=await API.userLogin(login);
+            if(response.isSuccess){
+                setError('');
+
+                sessionStorage.setItem(`accessToken`,`Bearer ${response.data.accessToken}`);
+                sessionStorage.setItem(`refreshToken`,`Bearer ${response.data.refreshToken}`);
+            }
+        }catch(e){
+            setError("something went wrong.")
+        }
+    }
     const imageURL = 'https://revenuearchitects.com/wp-content/uploads/2017/02/Blog_pic-450x255.png';
     return(
         <div className="row" style={{marginTop:'2rem'}}>
@@ -55,14 +77,14 @@ const Login=()=>{
                             <form style={{marginTop: '2rem', textAlign: 'left'}}>
                                 <div className='form-group'>
                                     <label for='email'>Email:</label>
-                                    <input type='text' className='form-control' id='email' name='email' placeholder='Enter your name'></input>
+                                    <input type='text' className='form-control' onChange={(e)=>onValueChange(e)} id='email' name='email' placeholder='Enter your name'></input>
                                 </div>
                                 <div className='form-group' style={{marginTop:'1.5rem'}}>
                                     <label for='password'>Password:</label>
-                                    <input type='password' className='form-control' id='pass' name='pass' placeholder='Enter your Password'></input>
+                                    <input type='password' className='form-control' onChange={(e)=>onValueChange(e)} id='pass' name='password' placeholder='Enter your Password'></input>
                                 </div>
                                 {error && <div className='error'>{error}</div>}
-                                <div className='btn form-control btn1' style={{backgroundColor: 'orange', marginTop:'1.5rem'}}>Login</div>
+                                <div className='btn form-control btn1' onClick={()=>loginUser()} style={{backgroundColor: 'orange', marginTop:'1.5rem'}}>Login</div>
                                 <div className='or' style={{marginTop:'1rem', marginBottom:'1rem', textAlign:'center'}}>OR</div>
                                 <div onClick={()=>togglesignup()} className='btn form-control btn2'>Create an Account</div>
                             </form>
