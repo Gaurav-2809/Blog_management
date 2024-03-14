@@ -1,6 +1,9 @@
-import {React,useState} from 'react'
+import {React,useState, useContext} from 'react'
 import './login.css'
 import { API } from '../../service/api.js'
+import { DataContext } from '../../context/DataProvider.js'
+import { useNavigate } from 'react-router-dom'
+
 const initialLogin={
     email:'',
     password:''
@@ -10,11 +13,14 @@ const initialSignup={
     email:'',
     password:''
 }
-const Login=()=>{
+const Login=({isUserAuthenticated})=>{
     const [accounts, signup]=useState('login');
     const [login, SetLogin]=useState(initialLogin);
     const [signupuser, setSignup]=useState(initialSignup);
     const [error, setError]=useState('');
+
+    const {setAccount}=useContext(DataContext);
+    const navigate = useNavigate();
     const togglesignup=()=>{
         accounts==='login'?signup('signup'):signup('login')
     }
@@ -58,6 +64,12 @@ const Login=()=>{
 
                 sessionStorage.setItem(`accessToken`,`Bearer ${response.data.accessToken}`);
                 sessionStorage.setItem(`refreshToken`,`Bearer ${response.data.refreshToken}`);
+
+                setAccount({username: response.data.username, name: response.data.name})
+                
+                isUserAuthenticated(true);
+
+                navigate('/');
             }
         }catch(e){
             setError("something went wrong.")
