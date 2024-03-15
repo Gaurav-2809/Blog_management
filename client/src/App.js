@@ -5,10 +5,12 @@ import Home from  './components/home/homepage'
 import {BrowserRouter, Routes, Route, Outlet, Navigate} from 'react-router-dom';
 import Header from './components/Header/header';
 import {useState} from 'react';
+import CreatePost from './components/create/createPost';
 
 const PrivateRoute=({isAuthenticated, ...props})=>{
   return isAuthenticated?
   <>
+    <Header/>
     <Outlet />
   </>
   : <Navigate replace to='/login'/>
@@ -20,12 +22,16 @@ function App() {
   return (
     <DataProvider>
       <BrowserRouter>
-      <Header/>
+      
       <div style={{marginTop:64}}/>
         <Routes>
           <Route path='/login' element={<Login isUserAuthenticated={isUserAuthenticated}/>} />
           <Route path='/' element={<PrivateRoute isAuthenticated={isAuthenticated}/>} >
             <Route path='/' element={<Home/>} />
+          </Route>
+
+          <Route path='/create' element={<PrivateRoute isAuthenticated={isAuthenticated}/>} >
+            <Route path='/create' element={<CreatePost/>} />
           </Route>
         </Routes>
       </BrowserRouter>
