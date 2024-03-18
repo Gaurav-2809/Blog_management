@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import {Box, styled, FormControl, InputBase, Button, TextareaAutosize } from '@mui/material'
 import {AddCircle as Add} from '@mui/icons-material';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { DataContext } from '../../context/DataProvider';
 import { API } from '../../service/api';
 
@@ -48,9 +48,10 @@ const CreatePost=()=>{
     const[file, setFile]=useState('');
 
     const location=useLocation();
+    const navigate= useNavigate();
     const {account}=useContext(DataContext);
 
-    const url=post.picture ? post.picture : "https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80";
+    
 
     useEffect(()=>{
         const getImage= async ()=>{
@@ -63,9 +64,9 @@ const CreatePost=()=>{
 
                 //API CALL
                 const response=await API.uploadFile(data);
-                console.log(response);
+                //console.log(response);
                 post.picture=response.data;
-                
+
             }
         }
         getImage();
@@ -77,6 +78,15 @@ const CreatePost=()=>{
         setPost({...post, [e.target.name]: e.target.value})
     }
 
+    const url=post.picture ? post.picture : "https://images.unsplash.com/photo-1543128639-4cb7e6eeef1b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bGFwdG9wJTIwc2V0dXB8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80";
+
+    const savePost=async ()=>{
+        let response=await API.CreatePost(post);
+        if(response.isSuccess){
+            navigate('/');
+        }
+    }
+    
     return(
         <Container>
             <Image src={url} alt="banner"/>
@@ -86,7 +96,7 @@ const CreatePost=()=>{
                 </label>
                 <input type="file" id="fileinput" style={{display:'none'}} onChange={(e)=>setFile(e.target.files[0])}/>
                 <InputTextField placeholder='Title' onChange={(e)=>handleChange(e)} name="title"/>
-                <Button variant='contained'>Publish</Button>
+                <Button variant='contained' onClick={()=>savePost()}>Publish</Button>
             </StyledFormControl>
             <TextAreaField minRows={5} placeholder='Tell something....' onChange={(e)=>handleChange(e)} name="description"/>
         </Container>
