@@ -65,7 +65,7 @@ const Login=({isUserAuthenticated})=>{
                 sessionStorage.setItem(`accessToken`,`Bearer ${response.data.accessToken}`);
                 sessionStorage.setItem(`refreshToken`,`Bearer ${response.data.refreshToken}`);
 
-                setAccount({username: response.data.username, name: response.data.name})
+                setAccount({username: response.data.email, name: response.data.name})
                 
                 isUserAuthenticated(true);
 
