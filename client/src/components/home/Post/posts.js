@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {API} from '../../../service/api'
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 import Post from './post.js';
 
@@ -25,7 +25,9 @@ const Posts=()=>{
             {
                posts && posts.length>0 ? posts.map(post=>(
                 <div className="col-sm-4">
-                    <Post post={post}/>
+                    <Link to={`details/${post._id}`} style={{textDecoration: "none", color:"black"}}> 
+                        <Post post={post}/>
+                    </Link>
                 </div>   
                )) : <div>No data available</div> 
             }

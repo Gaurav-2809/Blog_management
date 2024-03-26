@@ -6,6 +6,7 @@ import {BrowserRouter, Routes, Route, Outlet, Navigate} from 'react-router-dom';
 import Header from './components/Header/header';
 import {useState} from 'react';
 import CreatePost from './components/create/createPost';
+import DetailView from './components/details/DetailView';
 
 const PrivateRoute=({isAuthenticated, ...props})=>{
   return isAuthenticated?
@@ -21,8 +22,7 @@ function App() {
 
   return (
     <DataProvider>
-      <BrowserRouter>
-      
+      <BrowserRouter>      
       <div style={{marginTop:64}}/>
         <Routes>
           <Route path='/login' element={<Login isUserAuthenticated={isUserAuthenticated}/>} />
@@ -32,6 +32,10 @@ function App() {
 
           <Route path='/create' element={<PrivateRoute isAuthenticated={isAuthenticated}/>} >
             <Route path='/create' element={<CreatePost/>} />
+          </Route>
+
+          <Route path='/details/:id' element={<PrivateRoute isAuthenticated={isAuthenticated}/>} >
+            <Route path='/details/:id' element={<DetailView/>} />
           </Route>
         </Routes>
       </BrowserRouter>
