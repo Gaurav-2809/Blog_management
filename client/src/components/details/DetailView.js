@@ -1,5 +1,5 @@
 import {Box, Typography} from '@mui/material'
-import {useParams} from 'react-router-dom'
+import {useParams, Link, useNavigate} from 'react-router-dom'
 import { useState, useEffect,useContext } from 'react';
 import {DataContext} from '../../context/DataProvider'
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,6 +26,15 @@ const DetailView=()=>{
         fetchData();
     },[])
 
+    const navigate=useNavigate();
+
+    const deleteBlog= async()=>{
+        let response=await API.deletePost(post._id);
+        if(response.isSuccess){
+            navigate('/')
+        }
+    }
+
     return (   
         <>
             <Box textAlign={'center'}>
@@ -41,8 +50,8 @@ const DetailView=()=>{
                 {
                     account.username === post.username &&
                     <>
-                        <EditIcon style={{margin:"1rem"}}color='primary'/>
-                        <DeleteIcon color='error'/>
+                        <Link to={`/update/${post._id}`}><EditIcon style={{margin:"1rem"}}color='primary'/></Link>
+                        <DeleteIcon onClick={()=>deleteBlog()} color='error'/>
                     </>
                 }
                 
