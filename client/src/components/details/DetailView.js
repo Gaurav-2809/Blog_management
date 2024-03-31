@@ -7,6 +7,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import {API} from '../../service/api'
 
+
+import Comments from './comments/Commentss';
+
 const DetailView=()=>{
 
     const {id}=useParams();
@@ -54,8 +57,9 @@ const DetailView=()=>{
                         <DeleteIcon onClick={()=>deleteBlog()} color='error'/>
                     </>
                 }
-                
             </Box>
+            <Comments post={post} />   
+            
         </>
         
     )
